@@ -17,10 +17,17 @@ export class TextBox extends Container {
   static options = {
     padding: { left: 20, right: 48, top: 12 },
     backgroundColor: '#FFFFFF',
+    text: <TextStyle>{
+      fontFamily: 'AnekDevanagari',
+      fontSize: 11,
+      fill: '#39373A',
+      lineHeight: 17,
+    },
   };
   static textures: TextBoxTextures;
   sprites!: TextBoxSprites;
   scrollBar!: ScrollBar;
+  text!: Text;
   private scrollAmount = 100;
 
   constructor(opts: ITextBoxOptions) {
@@ -82,13 +89,13 @@ export class TextBox extends Container {
   private drawText(opts: ITextBoxOptions) {
     const text = new Text({
       text: opts.text,
-      style: new TextStyle({
-        fontFamily: 'AnekDevanagari',
-        fontSize: 10,
-        fill: '#39373A',
-      }),
+      style: TextBox.options.text,
       resolution: window.devicePixelRatio,
     });
+
+    this.text = text;
+
+    console.log(text.height);
 
     this.textContainer.addChild(text);
   }
@@ -110,9 +117,9 @@ export class TextBox extends Container {
   };
 
   get maxPivot(): number {
-    const { padding } = TextBox.options;
-    const textHeight = this.textContainer.getBounds().height;
-    const maskHeight = this.textMask.getBounds().height - padding.top * 2;
+    const textHeight = this.text.height;
+    const maskHeight = this.textMask.height - TextBox.options.padding.top;
+
     return Math.max(0, textHeight - maskHeight);
   }
 }
