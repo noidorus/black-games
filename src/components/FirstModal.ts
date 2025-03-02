@@ -16,7 +16,7 @@ export class FirstModal extends Modal {
     this.setupContent();
   }
 
-  setupContent() {
+  private setupContent() {
     const closeBtn = new Button({ textureName: 'closeBtn' });
     closeBtn.position.set(0, 110);
     this.addChild(closeBtn);

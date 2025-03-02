@@ -14,17 +14,17 @@ export class IntroModal extends Modal {
   nextBtn!: Button;
   prevBtn!: Button;
 
-  get currentPageName() {
-    return this.pages[this.currentPage].name;
-  }
-
   constructor({ pages, ...options }: IntroModalOptions) {
     super({ ...options, title: 'ДОБРЫЙ ВЕЧЕР', subtitle: pages[0].text, width: 540 });
     this.pages = pages;
     this.setupContent();
   }
 
-  setupContent() {
+  get currentPageName() {
+    return this.pages[this.currentPage].name;
+  }
+
+  private setupContent() {
     const selectPageBtn = new Button({ textureName: 'startBtn', text: 'ВЫБРАТЬ' });
     selectPageBtn.y = 90;
     this.addChild(selectPageBtn);

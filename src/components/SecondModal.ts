@@ -39,7 +39,7 @@ export class SecondModal extends Modal {
     this.setupContent();
   }
 
-  setupContent() {
+  private setupContent() {
     const closeBtn = new Button({ textureName: 'closeBtn' });
     closeBtn.position.set(0, 160);
     this.addChild(closeBtn);
@@ -50,7 +50,7 @@ export class SecondModal extends Modal {
     this.miniStars.position.set(0, -128);
     this.addChild(this.miniStars);
 
-    const textBox = new TextBox({...this.textBoxOptions, view: this});
+    const textBox = new TextBox({ ...this.textBoxOptions, view: this });
     textBox.position.set(-this.textBoxOptions.initWidth / 2, -40);
     this.addChild(textBox);
   }

@@ -16,23 +16,36 @@ type ModalSprites = { infoPlate: Sprite; star: Sprite };
 
 export class Modal extends Container {
   options = {
-    header: <Pick<TextStyle, 'fontFamily' | 'fontSize' | 'fill' | 'stroke' | 'letterSpacing'>>{
+    title: <TextStyle>{
       fontFamily: 'RuslanDisplay',
-      fontSize: 96,
+      fontSize: 48,
       fill: '#39373A',
     },
+    subtitle: new TextStyle({
+      fontFamily: 'AlumniSans',
+      fontSize: 48,
+      fill: '#39373A',
+    }),
   };
 
   subtitleText?: Text;
   static textures: ModalTextures;
   sprites!: ModalSprites;
-  rotationSpeed = Math.PI / 3; // 180° / 3с = π / 3 рад/с
-  initialWidth = -1;
-  initialHeight = -1;
+  private initialWidth = -1;
+  private initialHeight = -1;
+
+  private static preloadTextures() {
+    if (Modal.textures == null) {
+      Modal.textures = {
+        infoPlate: Texture.from('infoPlate'),
+        star: Texture.from('star'),
+      };
+    }
+  }
 
   constructor(options: ModalOptions) {
     super();
-    this.preloadTextures();
+    Modal.preloadTextures();
     this.setup(options);
 
     if (options.visible != null) {
@@ -57,36 +70,37 @@ export class Modal extends Container {
     this.addChild(this.sprites.infoPlate);
     this.addChild(this.sprites.star);
 
-    const headerText = new Text({ text: title, style: this.options.header });
-    headerText.anchor.set(0.5); // Центрируем
-    headerText.scale.set(0.5);
-    headerText.y = -90;
-
-    Scale.handleWidthHeight(this, width, height);
-    this.addChild(headerText);
+    const titleText = new Text({ text: title, style: this.options.title, resolution: window.devicePixelRatio });
+    titleText.anchor.set(0.5);
+    titleText.y = -90;
+    this.addChild(titleText);
 
     if (subtitle) {
       const subtitleText = new Text({
         text: subtitle,
-        style: new TextStyle({
-          fontFamily: 'AlumniSans',
-          fontSize: 96,
-          fill: '#39373A',
-        }),
+        style: this.options.subtitle,
+        resolution: window.devicePixelRatio,
       });
-      subtitleText.anchor.set(0.5); // Центрируем
-      subtitleText.scale.set(0.5);
+      subtitleText.anchor.set(0.5);
       subtitleText.y = -10;
       this.addChild(subtitleText);
       this.subtitleText = subtitleText;
     }
+
+    Scale.handleWidthHeight(this, width, height);
   }
 
   frontRotation(duration: number, callBack?: (rotation: number) => void) {
-    const targetRotation = Math.PI; // 180°
+    this.rotateStar(Math.PI, duration, callBack);
+  }
+
+  backRotation(duration: number, callBack?: (rotation: number) => void) {
+    this.rotateStar(0, duration, callBack);
+  }
+
+  private rotateStar(targetRotation: number, duration: number, callBack?: (rotation: number) => void) {
     const startRotation = this.sprites.star.rotation;
     const startTime = performance.now();
-
     const ticker = new Ticker();
 
     ticker.add(() => {
@@ -94,28 +108,6 @@ export class Modal extends Container {
       const progress = Math.min(elapsed / duration, 1);
 
       this.sprites.star.rotation = startRotation + progress * (targetRotation - startRotation);
-      if (progress >= 1) {
-        this.sprites.star.rotation = targetRotation;
-        ticker.stop();
-        callBack?.(targetRotation);
-      }
-    });
-
-    ticker.start();
-  }
-
-  backRotation(duration: number, callBack?: (rotation: number) => void) {
-    const startRotation = this.sprites.star.rotation;
-    const targetRotation = 0; // Возвращаем в 0°
-    const startTime = performance.now();
-
-    const ticker = new Ticker();
-
-    ticker.add(() => {
-      const elapsed = (performance.now() - startTime) / 1000;
-      const progress = Math.min(elapsed / duration, 1);
-
-      this.sprites.star.rotation = startRotation - progress * (targetRotation - startRotation);
 
       if (progress >= 1) {
         this.sprites.star.rotation = targetRotation;
@@ -125,15 +117,6 @@ export class Modal extends Container {
     });
 
     ticker.start();
-  }
-
-  private preloadTextures() {
-    if (Modal.textures == null) {
-      Modal.textures = {
-        infoPlate: Texture.from('infoPlate'),
-        star: Texture.from('star'),
-      };
-    }
   }
 
   showModal() {

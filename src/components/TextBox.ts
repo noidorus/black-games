@@ -30,22 +30,22 @@ export class TextBox extends Container {
   text!: Text;
   private scrollAmount = 100;
 
+  private static preloadTextures() {
+    if (TextBox.textures == null) {
+      TextBox.textures = { bg: Texture.from('textBox') };
+    }
+  }
+
   constructor(opts: ITextBoxOptions) {
     super();
-    this.preloadTextures();
+    TextBox.preloadTextures();
     this.setup();
     this.draw(opts);
     this.drawText(opts);
     this.setupEventListeners();
   }
 
-  preloadTextures() {
-    if (TextBox.textures == null) {
-      TextBox.textures = { bg: Texture.from('textBox') };
-    }
-  }
-
-  setup() {
+  private setup() {
     this.sprites = { bg: new Sprite(TextBox.textures.bg) };
     this.addChild(this.sprites.bg);
 
@@ -87,39 +87,27 @@ export class TextBox extends Container {
   }
 
   private drawText(opts: ITextBoxOptions) {
-    const text = new Text({
-      text: opts.text,
-      style: TextBox.options.text,
-      resolution: window.devicePixelRatio,
-    });
-
+    const text = new Text({ text: opts.text, style: TextBox.options.text, resolution: window.devicePixelRatio });
     this.text = text;
-
-    console.log(text.height);
-
     this.textContainer.addChild(text);
   }
 
-  setupEventListeners() {
+  private setupEventListeners() {
     this.eventMode = 'static';
-
     this.on('wheel', (e: FederatedWheelEvent) => this.scrollContent(e.deltaY));
   }
 
   private scrollContent = (delta: number) => {
     let nextPivot = this.textContainer.pivot.y + delta / 10;
-
     const { maxPivot } = this;
     nextPivot = Math.max(0, Math.min(nextPivot, maxPivot));
     this.textContainer.pivot.y = nextPivot;
-
     this.scrollBar.moveWheel(this.textContainer.pivot.y / maxPivot);
   };
 
   get maxPivot(): number {
     const textHeight = this.text.height;
     const maskHeight = this.textMask.height - TextBox.options.padding.top;
-
     return Math.max(0, textHeight - maskHeight);
   }
 }

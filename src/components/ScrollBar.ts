@@ -21,16 +21,24 @@ export class ScrollBar extends Container {
   onMove?: (ratio: number) => void;
   onClick?: (delta: number) => void;
 
+  private static prelaodTextures() {
+    if (ScrollBar.textures == null) {
+      ScrollBar.textures = {
+        controlsBg: Texture.from('controlsBg'),
+      };
+    }
+  }
+
   constructor(opts: IScrollBarOptions) {
     super();
+    ScrollBar.prelaodTextures();
     this.onMove = opts.onMove;
     this.onClick = opts.onClick;
-    this.prelaodTextures();
     this.setup();
     this.setupEventListeners();
   }
 
-  setup() {
+  private setup() {
     this.sprites = { controlsBg: new Sprite(ScrollBar.textures.controlsBg) };
     this.addChild(this.sprites.controlsBg);
 
@@ -71,7 +79,7 @@ export class ScrollBar extends Container {
     this.addChild(wheel);
   }
 
-  setupEventListeners() {
+  private setupEventListeners() {
     this.wheel.on('pointerdown', this.onDragStart);
     this.wheel.on('pointerup', this.onDragEnd);
     this.wheel.on('pointerupoutside', this.onDragEnd);
@@ -107,12 +115,4 @@ export class ScrollBar extends Container {
     const scrollRatio = (newY - minY) / (maxY - minY);
     this.onMove?.(scrollRatio);
   };
-
-  prelaodTextures() {
-    if (ScrollBar.textures == null) {
-      ScrollBar.textures = {
-        controlsBg: Texture.from('controlsBg'),
-      };
-    }
-  }
 }

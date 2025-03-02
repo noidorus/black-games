@@ -43,7 +43,7 @@ export class Button extends Container {
     this.texture = Texture.from(name);
   }
 
-  setup({ text, width, height }: ButtonOptions) {
+  private setup({ text, width, height }: ButtonOptions) {
     this.sprite = new Sprite({ texture: this.texture, width, height });
     this.sprite.anchor.set(0.5);
     this.addChild(this.sprite);
@@ -60,7 +60,7 @@ export class Button extends Container {
     this.setupEventListeners();
   }
 
-  setupEventListeners() {
+  private setupEventListeners() {
     this.on('pointerdown', (e) => {
       if (typeof this.onClick === 'function') {
         this.onClick(e);
@@ -81,7 +81,7 @@ export class Button extends Container {
     });
   }
 
-  updateState(hovered = false, pressed = false) {
+  private updateState(hovered = false, pressed = false) {
     if (pressed) {
       this.pressedState();
     } else {
@@ -93,15 +93,15 @@ export class Button extends Container {
     }
   }
 
-  idleState() {
+  private idleState() {
     this.scale.set(1);
   }
 
-  hoverState() {
+  private hoverState() {
     this.scale.set(1.05);
   }
 
-  pressedState() {
+  private pressedState() {
     this.scale.set(0.95);
   }
 }

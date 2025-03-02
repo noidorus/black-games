@@ -5,8 +5,6 @@ import { FirstModal } from './components/FirstModal';
 import { SecondModal } from './components/SecondModal';
 
 export class UI extends Container {
-  baseWidth = 1440;
-  baseHeight = 1024;
   introModal!: IntroModal;
   firstModal!: FirstModal;
   secondModal!: SecondModal;
@@ -34,14 +32,13 @@ export class UI extends Container {
       { alias: 'arrowSmall', src: '/assets/textures/arrow-small.png' },
     ]);
 
-    await Assets.loadBundle('images');
-
     Assets.addBundle('fonts', [
       { alias: 'RuslanDisplay', src: '/assets/fonts/RuslanDisplay.ttf' },
       { alias: 'AlumniSans', src: '/assets/fonts/AlumniSans.ttf' },
       { alias: 'AnekDevanagari', src: '/assets/fonts/AnekDevanagari.ttf' },
     ]);
 
+    await Assets.loadBundle('images');
     await Assets.loadBundle('fonts');
   }
 
