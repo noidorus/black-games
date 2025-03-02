@@ -1,5 +1,5 @@
 import { Container, FederatedPointerEvent, Sprite, Text, TextStyle, Texture } from 'pixi.js';
-import { Scale } from './utils/Scale';
+import { Scale } from '../utils/Scale';
 
 export interface ButtonOptions {
   pressed?: boolean;

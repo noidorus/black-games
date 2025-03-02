@@ -1,7 +1,7 @@
 import { Container, Sprite, Text, TextStyle, Texture, Ticker } from 'pixi.js';
-import { Scale } from './utils/Scale';
-import { IResizeParams } from './interfaces';
-import { Resize } from './utils/Resize';
+import { Scale } from '../utils/Scale';
+import { IResizeParams } from '../interfaces';
+import { Resize } from '../utils/Resize';
 
 export interface ModalOptions {
   visible?: boolean;

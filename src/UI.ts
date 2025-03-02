@@ -1,8 +1,8 @@
 import { Assets, Container } from 'pixi.js';
 import { IResizeParams } from './interfaces';
-import { IntroModal } from './IntroModal';
-import { FirstModal } from './FirstModal';
-import { SecondModal } from './SecondModal';
+import { IntroModal } from './components/IntroModal';
+import { FirstModal } from './components/FirstModal';
+import { SecondModal } from './components/SecondModal';
 
 export class UI extends Container {
   baseWidth = 1440;
